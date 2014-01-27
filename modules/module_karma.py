@@ -57,6 +57,7 @@ def handle_action(bot, user, reply, msg):
 
 def command_karma(bot, user, channel, args):
     """.karma <item>"""
+    return bot.say(channel, "|".join(args))
     item = args.split()[0]
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
@@ -71,7 +72,7 @@ def command_karma(bot, user, channel, args):
 
 """ By request of eric, .rank = .karma """
 def command_rank(bot, user, channel, args):
-    return command_karma(bot, user, channel, args)
+    return command_topkarma(bot, user, channel, args)
 
 def command_srank(bot, user, channel, args):
     """ .srank <substring> """
