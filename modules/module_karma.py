@@ -2,6 +2,9 @@ import re
 import sqlite3
 
 def do_karma(bot, user, channel, karma):
+    if "++" in karma[0] or "--" in karma[0]:
+        # this is the actual karma command. Hack?
+        return
     if karma[1] == '++':
         k = 1
     else:
@@ -57,8 +60,11 @@ def handle_action(bot, user, reply, msg):
 
 def command_karma(bot, user, channel, args):
     """.karma <item>"""
-    return bot.say(channel, "|".join(args))
+    # return bot.say(channel, "|".join(args))
     item = args.split()[0]
+    if item.find("++")!=-1 or item.find("--")!=-1:
+        return
+    
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
     t = (item.lower(),)
@@ -72,10 +78,12 @@ def command_karma(bot, user, channel, args):
 
 """ By request of eric, .rank = .karma """
 def command_rank(bot, user, channel, args):
+    print "command_rank"
     return command_topkarma(bot, user, channel, args)
 
 def command_srank(bot, user, channel, args):
     """ .srank <substring> """
+    print "command_srank"
     item = args.split()[0].decode("utf-8")
 
     conn = sqlite3.connect('karma.db')

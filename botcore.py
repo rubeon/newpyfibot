@@ -284,6 +284,10 @@ class PyFiBot(irc.IRCClient, CoreCommands):
 
         channel = channel.lower()
 
+        karmas = msg.find("++")!=-1 or msg.find("--")!=-1
+        if karmas and msg.find(".karma")==-1:
+            msg = ".karma " + msg
+
         lmsg = msg.lower()
         lnick = self.nickname.lower()
         nickl = len(lnick)
@@ -317,7 +321,8 @@ class PyFiBot(irc.IRCClient, CoreCommands):
         if urls:
             for url in urls:
                 self._runhandler("url", user, reply, url, msg)
-                                                        
+        
+              
     def _runhandler(self, handler, *args, **kwargs):
         """Run a handler for an event"""
         handler = "handle_%s" % handler

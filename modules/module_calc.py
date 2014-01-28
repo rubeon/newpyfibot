@@ -49,5 +49,6 @@ def calc_google(args):
         return "Invalid calculation"
 
 def command_calc(bot, user, channel, args):
+    """ calculator module that uses Google to do maths """
     if not args: return
     return bot.say(channel, calc_google(args))
