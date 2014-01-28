@@ -1,7 +1,18 @@
+# -*- encoding: utf8 -*-
+#
+# TODO:
+# - Throttling
+# - unfucking the karma message parser (_parse_karma, do_karma)
+
+
 import re
 import sqlite3
 
 def do_karma(bot, user, channel, karma):
+    """
+    perform karma adjustment
+    """
+    print "do_karma " + 20 * "-" + karma
     if "++" in karma[0] or "--" in karma[0]:
         # this is the actual karma command. Hack?
         return
@@ -28,6 +39,7 @@ def do_karma(bot, user, channel, karma):
     else:
         u = k
         q = (karma[0].lower(),u,)
+        
         c.execute('insert into karma (word, karma) VALUES (?,?)',q)
     
     conn.commit()
@@ -39,11 +51,13 @@ def do_karma(bot, user, channel, karma):
 def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))
-    if len(m) == 0 or len(m) >= 5: return None
+    # m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))
+    # if len(m) == 0 or len(m) >= 5: return None
 
-    for k in m:
-        do_karma(bot, user, reply, k)
+    # for k in m:
+    #     do_karma(bot, user, reply, k)
+    
+    _parse_karma(msg)
 
     return
 
@@ -61,7 +75,8 @@ def handle_action(bot, user, reply, msg):
 def command_karma(bot, user, channel, args):
     """.karma <item>"""
     # return bot.say(channel, "|".join(args))
-    item = args.split()[0]
+    print "command_karma: ARGS:", args
+    # item = args.split()[0]
     if item.find("++")!=-1 or item.find("--")!=-1:
         return
     
@@ -122,3 +137,51 @@ def command_topkarma(bot, user, channel, args):
         bot.say(channel, "Top 5: %s has %s karma" % (str(row[1]), row[2]))
 
     return
+
+
+def _parse_karma(msg):
+    """
+    This method is used to parse karma from a message.
+    It should allow for the following karma syntax:
+    thing--
+    thing++    
+    thing++
+    ++thing
+    thing1++ thing2++ thing3-- thing4--
+    ++thing1 ++thing2 --thing3 --thing4
+    thing++ is much better than thing--
+    """
+    
+    # parse the message into tokens
+    tokens = msg.split()
+    # walk through the tokens
+
+    for token in tokens:
+        # is it a ++ or a --?
+        if token.find("++")!=-1:
+            print "Adding +1 to %s" % token
+        elif token.find("--")!=-1:
+            print "Subtracting 1 from %s" % token
+
+        else:
+            print "Ignoring %s" % token
+    
+    # process the ++ or --
+
+
+if __name__ == "__main__":
+    messages = """
+    thing--
+    thing++    
+    thing++
+    ++thing
+    thing1++ thing2++ thing3-- thing4--
+    ++thing1 ++thing2 --thing3 --thing4
+    thing++ is much better than thing--
+    makes Poznan less attractive to me now --that place cost not £, but Pence… and claim European rates.  Can live like a lord out there on Per Diem.  Now it's just a place that is cheap but is a bitch for me to fly to.
+    """.split("\n")
+    
+    for message in messages:
+        print message, ":"
+        _parse_karma(message)
+        

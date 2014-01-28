@@ -262,9 +262,10 @@ class PyFiBotFactory(ThrottledClientFactory):
             aliases = socket.getaddrinfo(n.address[0], n.address[1], socket.AF_INET, socket.SOCK_STREAM)
             # alias is a tupel: (family, socktype, proto, canonname, sockaddr)
             aliases = [a[4][0] for a in aliases]
-            if socket.gethostbyname(address[0]) in aliases:
-                break
-        else:
+            print "ALIASES:", aliases
+            # if socket.gethostbyname(address[0]) in aliases:
+            #    break
+        if False:
             log.info("unknown network address: " + repr(address))
             return InstantDisconnectProtocol()
 
