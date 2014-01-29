@@ -131,7 +131,7 @@ def handle_privmsg(bot, user, reply, msg):
     ++thing1 ++thing2 --thing3 --thing4
     thing++ is much better than thing--
     """
-    
+    print "::", msg
     # parse the message into tokens
     tokens = msg.split()
     # walk through the tokens
@@ -156,7 +156,7 @@ def handle_privmsg(bot, user, reply, msg):
 
 def handle_action(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
-    print "handle_action"
+    print "::handle_action", user, reply, msg
 
     m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))    
     if len(m) == 0 or len(m) >= 5: return None
@@ -173,7 +173,7 @@ def command_karma(bot, user, channel, args):
     item = args.split()[0]
     if item.find("++")!=-1 or item.find("--")!=-1:
         return
-    
+
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
     t = (item.lower(),)
@@ -229,7 +229,6 @@ def command_topkarma(bot, user, channel, args):
 
     for row in c:
         bot.say(channel, "Top 5: %s has %s karma" % (str(row[1]), row[2]))
-
     return
 
 

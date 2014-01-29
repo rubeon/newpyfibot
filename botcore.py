@@ -284,10 +284,6 @@ class PyFiBot(irc.IRCClient, CoreCommands):
 
         channel = channel.lower()
 
-        karmas = msg.find("++")!=-1 or msg.find("--")!=-1
-        if karmas and msg.find(".karma")==-1:
-            msg = ".karma " + msg
-
         lmsg = msg.lower()
         lnick = self.nickname.lower()
         nickl = len(lnick)
