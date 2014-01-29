@@ -19,6 +19,7 @@ hugs = [
     "HUUUUUUUUUUUGS"
 ]
 
+
 def command_hug(bot, user, channel, args):
     """
     gives a little hug to who-/whatever
