@@ -16,7 +16,9 @@ hugs = [
     "wraps his arms around",
     "gives a big, juicy man-hug to",
     "hugs",
-    "HUUUUUUUUUUUGS"
+    "HUUUUUUUUUUUGS",
+    "gives an awkward pat on the back to",
+    
 ]
 
 
@@ -41,6 +43,8 @@ def command_hug(bot, user, channel, args):
     print pillow_talk
     # print bot.who(user, channel, [()])
     # bot.names()
-    bot.say(channel, pillow_talk % locals())
+    # 25% chance that there's pillow-talk afterwards...
+    if random.random()*100 < 25:
+        bot.say(channel, pillow_talk % locals())
     
     
